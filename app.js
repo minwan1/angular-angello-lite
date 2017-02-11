@@ -1,125 +1,85 @@
 var myModule = angular.module('Angello', []);
 
-myModule.factory('AngelloHelper', function() {
-    var buildIndex = function (source, property) {
+myModule.factory('AngelloHelper', function() {  //manage common utility code
+    var buildIndex = function(source, property){
         var tempArray = [];
 
-        for (var i = 0, len = source.length; i < len; ++i) {
+        for(var i= 0, len=source.length; i<len; ++i){
             tempArray[source[i][property]] = source[i];
         }
-
         return tempArray;
     };
 
     return {
-        buildIndex: buildIndex
+        buildIndex:buildIndex
     };
+
 });
 
-myModule.service('AngelloModel', function() {
+myModule.service('AngelloModel', function() { //manage data
     var service = this,
-        statuses = [
-            {name: 'Back Log'},
-            {name: 'To Do'},
-            {name: 'In Progress'},
-            {name: 'Code Review'},
-            {name: 'QA Review'},
-            {name: 'Verified'},
-            {name: 'Done'}
-        ],
-        types = [
-            {name: 'Feature'},
-            {name: 'Enhancement'},
-            {name: 'Bug'},
-            {name: 'Spike'}
-        ],
         stories = [
             {
-                title: 'First story',
-                description: 'Our first story.',
-                criteria: 'Criteria pending.',
-                status: 'To Do',
-                type: 'Feature',
-                reporter: 'Lukas Ruebbelke',
-                assignee: 'Brian Ford'
+                title:'첫 번째 스토리',
+                description : '첫 번째 사용자 스토리',
+                criteria : '요구사항 정리 중...',
+                status:'해야할 일',
+                type:'기능',
+                reporter:'웹지니',
+                assignee:'웹지니'
             },
             {
-                title: 'Second story',
-                description: 'Do something.',
-                criteria: 'Criteria pending.',
-                status: 'Back Log',
-                type: 'Feature',
-                reporter: 'Lukas Ruebbelke',
-                assignee: 'Brian Ford'
+                title:'두 번째 스토리',
+                description : '두 번째 사용자 스토리',
+                criteria : '요구사항 정리 중...',
+                status:'백로그',
+                type:'기능',
+                reporter:'웹지니',
+                assignee:'웹지니'
             },
             {
-                title: 'Another story',
-                description: 'Just one more.',
-                criteria: 'Criteria pending.',
-                status: 'Code Review',
-                type: 'Enhancement',
-                reporter: 'Lukas Ruebbelke',
-                assignee: 'Brian Ford'
+                title:'세 번째 스토리',
+                description : '세 번째 사용자 스토리',
+                criteria : '요구사항 정리 중...',
+                status:'코드 리뷰',
+                type:'개선',
+                reporter:'웹지니',
+                assignee:'웹지니'
             }
         ];
 
-    service.getStatuses = function () {
-        return statuses;
+    service.getStories = function(){
+      return stories;
     };
 
-    service.getTypes = function () {
-        return types;
-    };
-
-    service.getStories = function () {
-        return stories;
-    };
 });
 
-myModule.controller('MainCtrl', function(AngelloModel, AngelloHelper) {
+myModule.controller('MainCtrl', function(AngelloModel) {
     var main = this;
 
-    main.types = AngelloModel.getTypes();
-    main.statuses = AngelloModel.getStatuses();
     main.stories = AngelloModel.getStories();
-    main.typesIndex = AngelloHelper.buildIndex(main.types, 'name');
-    main.statusesIndex = AngelloHelper.buildIndex(main.statuses, 'name');
 
-    main.setCurrentStory = function (story) {
-        main.currentStory = story;
-        main.currentStatus = main.statusesIndex[story.status];
-        main.currentType = main.typesIndex[story.type];
-    };
+    main.createStory = function(){
 
-    main.createStory = function() {
         main.stories.push({
-            title: 'New Story',
-            description: 'Description pending.',
-            criteria: 'Criteria pending.',
-            status: 'Back Log',
-            type: 'Feature',
-            reporter: 'Pending',
-            assignee: 'Pending'
+            title:'새 사용자 스토리',
+                description : '설명을 입력하세요',
+            criteria : '요구사항 정리 중...',
+            status:'백로그',
+            type:'가능',
+            reporter:'미정',
+            assignee:'미정'
         });
+
     };
 
-    main.setCurrentStatus = function (status) {
-        if (typeof main.currentStory !== 'undefined') {
-            main.currentStory.status = status.name;
-        }
-    };
-
-    main.setCurrentType = function (type) {
-        if (typeof main.currentStory !== 'undefined') {
-            main.currentStory.type = type.name;
-        }
-    };
 });
 
 myModule.directive('story', function() {
     return {
-        scope: true,
-        replace: true,
-        template: '<div><h4>{{story.title}}</h4><p>{{story.description}}</p></div>'
+        scope:true,
+        replace :true,
+        template:'<div><h4>{{story.title}}</h4><p>{{story.description}}</p></div>'
     }
+
 });
